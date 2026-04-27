@@ -7,610 +7,135 @@
 <style>
   :root {
     --orange: #E87722;
-    --orange-dim: #b85d16;
-    --orange-glow: rgba(232,119,34,0.15);
-    --bg: #0A0A0A;
-    --bg2: #111111;
-    --bg3: #181818;
-    --bg4: #1f1f1f;
+    --orange-glow: rgba(232,119,34,0.13);
+    --bg: #0A0A0A; --bg2: #111; --bg3: #181818; --bg4: #1f1f1f;
     --border: rgba(232,119,34,0.2);
-    --border-subtle: rgba(255,255,255,0.06);
-    --text: #F0EDE8;
-    --text-muted: #888880;
-    --text-dim: #555550;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Zen Hei', sans-serif;
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-
-  /* ── NOISE TEXTURE OVERLAY ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 60px;
-    background: rgba(10,10,10,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border-subtle);
-  }
-
-  .nav-logo {
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--orange);
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 36px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    color: var(--text-muted);
-    text-decoration: none;
-    font-size: 13px;
-    letter-spacing: 1px;
-    transition: color 0.2s;
-  }
-
-  .nav-links a:hover { color: var(--orange); }
-
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    padding: 100px 60px 60px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .hero-bg-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(232,119,34,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(232,119,34,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-  }
-
-  .hero-bg-glow {
-    position: absolute;
-    top: 20%;
-    right: 10%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(232,119,34,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .hero-content {
-    position: relative;
-    z-index: 1;
-    max-width: 700px;
-  }
-
-  .hero-eyebrow {
-    font-size: 12px;
-    letter-spacing: 4px;
-    color: var(--orange);
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    opacity: 0;
-    animation: fadeUp 0.6s 0.2s forwards;
-  }
-
-  .hero-name {
-    font-size: clamp(52px, 8vw, 88px);
-    font-weight: 700;
-    line-height: 1.0;
-    letter-spacing: -1px;
-    color: var(--text);
-    margin-bottom: 16px;
-    opacity: 0;
-    animation: fadeUp 0.6s 0.35s forwards;
-  }
-
-  .hero-name span {
-    color: var(--orange);
-    display: inline-block;
-  }
-
-  .hero-title {
-    font-size: 16px;
-    color: var(--text-muted);
-    margin-bottom: 32px;
-    letter-spacing: 1px;
-    opacity: 0;
-    animation: fadeUp 0.6s 0.5s forwards;
-  }
-
-  .hero-stats {
-    display: flex;
-    gap: 40px;
-    margin-bottom: 48px;
-    opacity: 0;
-    animation: fadeUp 0.6s 0.65s forwards;
-  }
-
-  .stat-item { text-align: left; }
-
-  .stat-num {
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--orange);
-    line-height: 1;
-  }
-
-  .stat-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    letter-spacing: 1px;
-    margin-top: 4px;
-  }
-
-  .hero-cta {
-    display: flex;
-    gap: 16px;
-    opacity: 0;
-    animation: fadeUp 0.6s 0.8s forwards;
-  }
-
-  .btn-primary {
-    padding: 14px 32px;
-    background: var(--orange);
-    color: #000;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 1px;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.2s, transform 0.1s;
-    display: inline-block;
-  }
-
-  .btn-primary:hover { background: #ff9944; transform: translateY(-1px); }
-
-  .btn-outline {
-    padding: 14px 32px;
-    background: transparent;
-    color: var(--text-muted);
-    font-size: 13px;
-    letter-spacing: 1px;
-    border: 1px solid var(--border);
-    cursor: pointer;
-    text-decoration: none;
-    transition: border-color 0.2s, color 0.2s;
-    display: inline-block;
-  }
-
-  .btn-outline:hover { border-color: var(--orange); color: var(--orange); }
-
-  /* ── SECTIONS ── */
-  section {
-    padding: 100px 60px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .section-label {
-    font-size: 11px;
-    letter-spacing: 4px;
-    color: var(--orange);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  .section-title {
-    font-size: clamp(28px, 4vw, 42px);
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 60px;
-    line-height: 1.2;
-  }
-
-  .section-title span { color: var(--orange); }
-
-  /* ── WORKS GRID ── */
-  #works { background: var(--bg2); }
-
-  .works-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2px;
-  }
-
-  .work-card {
-    position: relative;
-    aspect-ratio: 4/3;
-    overflow: hidden;
-    cursor: pointer;
-    background: var(--bg3);
-  }
-
-  .work-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.5s ease, filter 0.5s ease;
-    filter: brightness(0.85);
-  }
-
-  .work-card:hover img {
-    transform: scale(1.05);
-    filter: brightness(0.6);
-  }
-
-  .work-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 60%);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 24px;
-    opacity: 0;
-    transition: opacity 0.3s;
-  }
-
-  .work-card:hover .work-overlay { opacity: 1; }
-
-  .work-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg3);
-    border: 1px dashed rgba(232,119,34,0.2);
-    gap: 12px;
-    color: var(--text-dim);
-    font-size: 12px;
-    letter-spacing: 1px;
-    transition: border-color 0.3s, color 0.3s;
-  }
-
-  .work-card:hover .work-placeholder {
-    border-color: var(--orange);
-    color: var(--orange);
-  }
-
-  .work-placeholder svg {
-    width: 32px;
-    height: 32px;
-    opacity: 0.3;
-  }
-
-  .work-card:hover .work-placeholder svg { opacity: 0.8; }
-
-  .work-tags {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    margin-bottom: 8px;
-  }
-
-  .work-tag {
-    font-size: 10px;
-    letter-spacing: 1px;
-    padding: 3px 10px;
-    border: 1px solid var(--orange);
-    color: var(--orange);
-    text-transform: uppercase;
-  }
-
-  .work-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  .work-desc {
-    font-size: 12px;
-    color: var(--text-muted);
-    margin-top: 4px;
-  }
-
-  /* ── SKILLS ── */
-  #skills { background: var(--bg); }
-
-  .skills-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: start;
-  }
-
-  .skill-group { margin-bottom: 40px; }
-
-  .skill-group-title {
-    font-size: 11px;
-    letter-spacing: 3px;
-    color: var(--orange);
-    text-transform: uppercase;
-    margin-bottom: 20px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .skill-bar-item { margin-bottom: 16px; }
-
-  .skill-bar-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 6px;
-  }
-
-  .skill-bar-name { font-size: 13px; color: var(--text); }
-  .skill-bar-pct { font-size: 12px; color: var(--text-dim); }
-
-  .skill-bar-track {
-    height: 2px;
-    background: var(--bg4);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .skill-bar-fill {
-    height: 100%;
-    background: var(--orange);
-    transform-origin: left;
-    transform: scaleX(0);
-    animation: barFill 1s ease forwards;
-    animation-play-state: paused;
-  }
-
-  .skill-bar-fill.animated { animation-play-state: running; }
-
-  .skill-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .skill-tag {
-    padding: 8px 16px;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    font-size: 12px;
-    letter-spacing: 1px;
-    transition: border-color 0.2s, color 0.2s, background 0.2s;
-  }
-
-  .skill-tag:hover {
-    border-color: var(--orange);
-    color: var(--orange);
-    background: var(--orange-glow);
-  }
-
-  /* ── ABOUT ── */
-  #about { background: var(--bg2); }
-
-  .about-layout {
-    display: grid;
-    grid-template-columns: 1fr 1.4fr;
-    gap: 80px;
-    align-items: center;
-  }
-
-  .about-photo-wrap {
-    position: relative;
-  }
-
-  .about-photo-frame {
-    width: 100%;
-    aspect-ratio: 3/4;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .about-photo-frame img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .about-photo-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    color: var(--text-dim);
-    font-size: 12px;
-    letter-spacing: 1px;
-  }
-
-  .about-deco {
-    position: absolute;
-    bottom: -16px;
-    right: -16px;
-    width: 80px;
-    height: 80px;
-    border: 2px solid var(--orange);
-    opacity: 0.4;
-  }
-
-  .about-deco2 {
-    position: absolute;
-    top: -16px;
-    left: -16px;
-    width: 40px;
-    height: 40px;
-    border: 1px solid var(--orange);
-    opacity: 0.2;
-  }
-
-  .about-text h3 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 20px;
-    line-height: 1.4;
-  }
-
-  .about-text p {
-    font-size: 14px;
-    color: var(--text-muted);
-    margin-bottom: 16px;
-    line-height: 1.8;
-  }
-
-  .about-info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-top: 32px;
-  }
-
-  .info-item { }
-
-  .info-label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    margin-bottom: 4px;
-  }
-
-  .info-value {
-    font-size: 14px;
-    color: var(--text);
-  }
-
-  /* ── CONTACT ── */
-  #contact {
-    background: var(--bg);
-    text-align: center;
-  }
-
-  .contact-inner {
-    max-width: 560px;
-    margin: 0 auto;
-  }
-
-  .contact-inner p {
-    font-size: 15px;
-    color: var(--text-muted);
-    margin-bottom: 40px;
-    line-height: 1.8;
-  }
-
-  .contact-links {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 60px;
-  }
-
-  .contact-chip {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    font-size: 13px;
-    text-decoration: none;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  .contact-chip:hover { border-color: var(--orange); color: var(--orange); }
-
-  /* ── FOOTER ── */
-  footer {
-    padding: 24px 60px;
-    background: var(--bg2);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid var(--border-subtle);
-  }
-
-  footer p { font-size: 12px; color: var(--text-dim); }
-
-  /* ── DIVIDER ── */
-  .orange-line {
-    width: 40px;
-    height: 2px;
-    background: var(--orange);
-    margin-bottom: 40px;
-  }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes barFill {
-    from { transform: scaleX(0); }
-    to   { transform: scaleX(1); }
-  }
-
-  /* ── SCROLL REVEAL ── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    nav { padding: 16px 24px; }
-    .nav-links { display: none; }
-    .hero { padding: 100px 24px 60px; }
-    section { padding: 70px 24px; }
-    .hero-stats { gap: 24px; }
-    .skills-layout { grid-template-columns: 1fr; gap: 40px; }
-    .about-layout { grid-template-columns: 1fr; gap: 40px; }
-    .about-photo-frame { aspect-ratio: 1/1; }
-    footer { padding: 20px 24px; flex-direction: column; gap: 8px; text-align: center; }
+    --border-s: rgba(255,255,255,0.06);
+    --text: #F0EDE8; --muted: #888880; --dim: #555550;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif;line-height:1.6;overflow-x:hidden;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:18px 60px;background:rgba(10,10,10,0.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--border-s);}
+  .nav-logo{font-size:18px;font-weight:700;letter-spacing:3px;color:var(--orange);}
+  .nav-links{display:flex;gap:32px;list-style:none;}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:13px;letter-spacing:1px;transition:color .2s;}
+  .nav-links a:hover{color:var(--orange);}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.28);}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(232,119,34,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(232,119,34,.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+  .hero-content{position:relative;z-index:1;padding:120px 60px 60px;max-width:740px;}
+  .eyebrow{font-size:11px;letter-spacing:4px;color:var(--orange);text-transform:uppercase;margin-bottom:20px;opacity:0;animation:up .6s .2s forwards;}
+  .hero-name{font-size:clamp(52px,8vw,90px);font-weight:700;line-height:1;letter-spacing:-1px;margin-bottom:16px;opacity:0;animation:up .6s .35s forwards;}
+  .hero-name span{color:var(--orange);}
+  .hero-sub{font-size:15px;color:var(--muted);margin-bottom:36px;letter-spacing:1px;opacity:0;animation:up .6s .5s forwards;}
+  .stats{display:flex;gap:44px;margin-bottom:52px;opacity:0;animation:up .6s .65s forwards;}
+  .stat-n{font-size:32px;font-weight:700;color:var(--orange);line-height:1;}
+  .stat-l{font-size:11px;color:var(--muted);letter-spacing:1px;margin-top:4px;}
+  .cta{display:flex;gap:14px;opacity:0;animation:up .6s .8s forwards;}
+  .btn-o{padding:13px 30px;background:var(--orange);color:#000;font-weight:700;font-size:13px;letter-spacing:1px;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:background .2s,transform .1s;}
+  .btn-o:hover{background:#ff9944;transform:translateY(-1px);}
+  .btn-g{padding:13px 30px;background:transparent;color:var(--muted);font-size:13px;letter-spacing:1px;border:1px solid var(--border);cursor:pointer;text-decoration:none;display:inline-block;transition:all .2s;}
+  .btn-g:hover{border-color:var(--orange);color:var(--orange);}
+
+  /* SECTIONS */
+  section{padding:96px 60px;position:relative;z-index:1;}
+  .s-label{font-size:11px;letter-spacing:4px;color:var(--orange);text-transform:uppercase;margin-bottom:10px;}
+  .s-title{font-size:clamp(26px,4vw,40px);font-weight:700;color:var(--text);margin-bottom:12px;line-height:1.2;}
+  .s-title span{color:var(--orange);}
+  .s-desc{font-size:13.5px;color:var(--muted);margin-bottom:44px;max-width:580px;line-height:1.8;}
+
+  /* WORKS */
+  #works{background:var(--bg2);}
+
+  /* CATEGORY TABS */
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:32px;}
+  .tab{padding:7px 18px;border:1px solid var(--border);color:var(--muted);font-size:12px;letter-spacing:1px;cursor:pointer;background:transparent;font-family:inherit;transition:all .2s;}
+  .tab:hover,.tab.on{border-color:var(--orange);color:var(--orange);background:var(--orange-glow);}
+
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:3px;}
+  .card{position:relative;aspect-ratio:16/9;overflow:hidden;cursor:pointer;background:var(--bg3);}
+  .card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s,filter .5s;filter:brightness(.88);}
+  .card:hover img{transform:scale(1.06);filter:brightness(.45);}
+  .overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.94) 0%,transparent 52%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px;opacity:0;transition:opacity .3s;}
+  .card:hover .overlay{opacity:1;}
+  .tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:5px;}
+  .tag{font-size:9px;letter-spacing:1px;padding:2px 8px;border:1px solid var(--orange);color:var(--orange);text-transform:uppercase;}
+  .c-title{font-size:14px;font-weight:700;color:var(--text);}
+  .c-desc{font-size:11px;color:var(--muted);margin-top:2px;}
+
+  /* LIGHTBOX */
+  .lb{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.96);align-items:center;justify-content:center;}
+  .lb.open{display:flex;}
+  .lb img{max-width:90vw;max-height:88vh;object-fit:contain;border:1px solid var(--border);}
+  .lb-x{position:absolute;top:18px;right:26px;font-size:34px;color:var(--muted);cursor:pointer;transition:color .2s;line-height:1;}
+  .lb-x:hover{color:var(--orange);}
+  .lb-p,.lb-n{position:absolute;top:50%;transform:translateY(-50%);font-size:30px;color:var(--muted);cursor:pointer;padding:14px;transition:color .2s;background:rgba(0,0,0,.35);user-select:none;}
+  .lb-p{left:10px;} .lb-n{right:10px;}
+  .lb-p:hover,.lb-n:hover{color:var(--orange);}
+  .lb-cap{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);font-size:12px;color:var(--muted);letter-spacing:1px;text-align:center;white-space:nowrap;}
+
+  /* SKILLS */
+  #skills{background:var(--bg);}
+  .sk-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+  .sk-group{margin-bottom:32px;}
+  .sk-head{font-size:10px;letter-spacing:3px;color:var(--orange);text-transform:uppercase;margin-bottom:16px;padding-bottom:7px;border-bottom:1px solid var(--border);}
+  .sk-item{margin-bottom:13px;}
+  .sk-row{display:flex;justify-content:space-between;margin-bottom:5px;}
+  .sk-name{font-size:13px;color:var(--text);}
+  .sk-pct{font-size:11px;color:var(--dim);}
+  .sk-track{height:2px;background:var(--bg4);}
+  .sk-fill{height:100%;background:var(--orange);transform-origin:left;transform:scaleX(0);transition:transform 1.2s ease;}
+  .sk-tags{display:flex;flex-wrap:wrap;gap:9px;}
+  .sk-tag{padding:7px 15px;border:1px solid var(--border);color:var(--muted);font-size:12px;letter-spacing:1px;transition:all .2s;cursor:default;}
+  .sk-tag:hover{border-color:var(--orange);color:var(--orange);background:var(--orange-glow);}
+
+  /* ABOUT */
+  #about{background:var(--bg2);}
+  .ab-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:72px;align-items:center;}
+  .ab-frame{width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--border);}
+  .ab-frame img{width:100%;height:100%;object-fit:cover;display:block;}
+  .ab-text h3{font-size:21px;font-weight:700;color:var(--text);margin-bottom:18px;line-height:1.4;}
+  .ab-text p{font-size:13.5px;color:var(--muted);margin-bottom:13px;line-height:1.85;}
+  .orange-line{width:38px;height:2px;background:var(--orange);margin-bottom:26px;}
+  .ab-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px;}
+  .i-label{font-size:9.5px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:3px;}
+  .i-val{font-size:13px;color:var(--text);}
+
+  /* CONTACT */
+  #contact{background:var(--bg);text-align:center;}
+  .ct-wrap{max-width:540px;margin:0 auto;}
+  .ct-wrap p{font-size:14px;color:var(--muted);margin-bottom:36px;line-height:1.85;}
+  .ct-links{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:36px;}
+  .chip{display:flex;align-items:center;gap:8px;padding:11px 22px;border:1px solid var(--border);color:var(--muted);font-size:13px;text-decoration:none;transition:all .2s;}
+  .chip:hover{border-color:var(--orange);color:var(--orange);}
+
+  footer{padding:22px 60px;background:var(--bg2);display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border-s);}
+  footer p{font-size:11px;color:var(--dim);}
+
+  @keyframes up{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.on{opacity:1;transform:translateY(0);}
+
+  @media(max-width:768px){
+    nav{padding:14px 20px;}
+    .nav-links{display:none;}
+    .hero-content{padding:100px 20px 60px;}
+    section{padding:64px 20px;}
+    .stats{gap:20px;}
+    .sk-layout,.ab-layout{grid-template-columns:1fr;gap:36px;}
+    .grid{grid-template-columns:1fr;}
+    footer{padding:18px 20px;flex-direction:column;gap:6px;}
   }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">WZY</div>
   <ul class="nav-links">
@@ -623,29 +148,20 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-bg-grid"></div>
-  <div class="hero-bg-glow"></div>
+  <img class="hero-bg" src="1.jpg" alt="cover">
+  <div class="hero-grid"></div>
   <div class="hero-content">
-    <p class="hero-eyebrow">跨境电商视觉设计师 · 3D产品设计</p>
+    <p class="eyebrow">跨境电商视觉设计师 · 3D 产品设计</p>
     <h1 class="hero-name">吴<span>兆</span>宇</h1>
-    <p class="hero-title">Amazon · 独立站 · 速卖通 · 5年经验</p>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <div class="stat-num">100+</div>
-        <div class="stat-label">Amazon A+ 页面</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">5yr</div>
-        <div class="stat-label">跨境电商设计</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">3平台</div>
-        <div class="stat-label">多平台覆盖</div>
-      </div>
+    <p class="hero-sub">Amazon · 独立站 · 速卖通 · 5年经验</p>
+    <div class="stats">
+      <div><div class="stat-n">100+</div><div class="stat-l">Amazon A+ 页面</div></div>
+      <div><div class="stat-n">5yr</div><div class="stat-l">跨境电商设计</div></div>
+      <div><div class="stat-n">5类</div><div class="stat-l">多元设计能力</div></div>
     </div>
-    <div class="hero-cta">
-      <a href="#works" class="btn-primary">查看作品</a>
-      <a href="#contact" class="btn-outline">联系我</a>
+    <div class="cta">
+      <a href="#works" class="btn-o">查看作品</a>
+      <a href="#contact" class="btn-g">联系我</a>
     </div>
   </div>
 </section>
@@ -653,84 +169,124 @@
 <!-- WORKS -->
 <section id="works">
   <div class="reveal">
-    <p class="section-label">Portfolio</p>
-    <h2 class="section-title">精选<span>作品</span></h2>
+    <p class="s-label">Portfolio</p>
+    <h2 class="s-title">精选<span>作品</span></h2>
+    <p class="s-desc">涵盖 Amazon A+、Banner 广告、品牌 Logo、3D 建模渲染、摄影，全流程独立完成。</p>
   </div>
+  <div class="tabs reveal">
+    <button class="tab on" onclick="filter('all',this)">全部</button>
+    <button class="tab" onclick="filter('amazon',this)">Amazon A+</button>
+    <button class="tab" onclick="filter('banner',this)">Banner 设计</button>
+    <button class="tab" onclick="filter('logo',this)">Logo 设计</button>
+    <button class="tab" onclick="filter('3d',this)">3D 建模渲染</button>
+    <button class="tab" onclick="filter('photo',this)">摄影</button>
+  </div>
+  <div class="grid reveal" id="grid">
 
-  <div class="works-grid reveal">
-
-    <!-- 替换方法：把 work-placeholder div 整体替换为 <img src="你的图片.jpg" alt="作品名称"> -->
-
-    <div class="work-card">
-      <div class="work-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        Amazon A+ 页面
-      </div>
-      <div class="work-overlay">
-        <div class="work-tags"><span class="work-tag">Amazon</span><span class="work-tag">A+</span></div>
-        <div class="work-title">Amazon A+ 产品详情页</div>
-        <div class="work-desc">模块化设计 · 卖点视觉化 · 移动端适配</div>
-      </div>
+    <!-- Amazon A+ -->
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="3.jpg" alt="项目背景">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">策划</span></div><div class="c-title">亲子零食品牌 · 项目背景</div><div class="c-desc">市场调研 · 品牌定位 · 设计方向制定</div></div>
+    </div>
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="4.jpg" alt="婴儿忙碌板主图">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">主图</span></div><div class="c-title">婴儿忙碌板 · 主图设计</div><div class="c-desc">BJCrafts 16合1 · 场景图 · 卖点可视化</div></div>
+    </div>
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="5.jpg" alt="婴儿忙碌板A+">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">A+</span></div><div class="c-title">婴儿忙碌板 · A+ 页面</div><div class="c-desc">Logo · 场景图 · 参数模块 · 移动端适配</div></div>
+    </div>
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="6.jpg" alt="市场数据">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">数据</span></div><div class="c-title">市场数据调研页</div><div class="c-desc">销售数据可视化 · 转化率对比图表</div></div>
+    </div>
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="7.jpg" alt="簇绒枪设计思路">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">产品设计</span></div><div class="c-title">簇绒枪 · 设计思路</div><div class="c-desc">结构拆解 · 卖点提炼 · 信息层级规划</div></div>
+    </div>
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="8.jpg" alt="簇绒枪主图">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">主图</span></div><div class="c-title">簇绒枪 · 主图设计</div><div class="c-desc">Cut Pile Tufting Gun · 特性图标模块</div></div>
+    </div>
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="9.jpg" alt="簇绒枪参数">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">A+</span></div><div class="c-title">簇绒枪 · 参数详情页</div><div class="c-desc">尺寸标注 · 功能参数 · 工艺说明</div></div>
+    </div>
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="10.jpg" alt="簇绒枪场景">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">场景图</span></div><div class="c-title">簇绒枪 · 应用场景展示</div><div class="c-desc">多款成品地毯效果 · 使用场景渲染</div></div>
+    </div>
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="11.jpg" alt="华夫饼机主图">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">主图</span></div><div class="c-title">商用华夫饼机 · 主图</div><div class="c-desc">KOSIEJINN 110V · 生活场景融合设计</div></div>
+    </div>
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="12.jpg" alt="华夫饼机详情">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">详情页</span></div><div class="c-title">商用华夫饼机 · 产品详情</div><div class="c-desc">产品图 + 食材场景图 · 双图模块</div></div>
+    </div>
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="13.jpg" alt="华夫饼机场景">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">场景图</span></div><div class="c-title">华夫饼机 · 家庭使用场景</div><div class="c-desc">拼贴式场景展示 · 多图信息图</div></div>
+    </div>
+    <div class="card" data-cat="amazon" onclick="lb(this)">
+      <img src="14.jpg" alt="华夫饼机卖点">
+      <div class="overlay"><div class="tags"><span class="tag">Amazon</span><span class="tag">A+</span></div><div class="c-title">华夫饼机 · 核心卖点页</div><div class="c-desc">4大卖点模块 · 双语说明 · 图文结合</div></div>
     </div>
 
-    <div class="work-card">
-      <div class="work-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        主图设计
-      </div>
-      <div class="work-overlay">
-        <div class="work-tags"><span class="work-tag">Amazon</span><span class="work-tag">主图</span></div>
-        <div class="work-title">亚马逊产品主图</div>
-        <div class="work-desc">白底主图 · 场景图 · 信息图</div>
-      </div>
+    <!-- Banner -->
+    <div class="card" data-cat="banner" onclick="lb(this)">
+      <img src="15.jpg" alt="Halloween Banner">
+      <div class="overlay"><div class="tags"><span class="tag">Banner</span><span class="tag">大促</span></div><div class="c-title">Halloween 促销 Banner</div><div class="c-desc">节日氛围设计 · 15% OFF 活动素材</div></div>
+    </div>
+    <div class="card" data-cat="banner" onclick="lb(this)">
+      <img src="16.jpg" alt="电子烟Banner">
+      <div class="overlay"><div class="tags"><span class="tag">Banner</span><span class="tag">独立站</span></div><div class="c-title">电子烟品牌 Banner 系列</div><div class="c-desc">ELF BAR · IJOY · OKK 多品牌广告素材</div></div>
     </div>
 
-    <div class="work-card">
-      <div class="work-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l5 3"/></svg>
-        3D 渲染
-      </div>
-      <div class="work-overlay">
-        <div class="work-tags"><span class="work-tag">3D</span><span class="work-tag">KeyShot</span></div>
-        <div class="work-title">产品 3D 渲染</div>
-        <div class="work-desc">3ds Max · KeyShot · 场景渲染</div>
-      </div>
+    <!-- Logo -->
+    <div class="card" data-cat="logo" onclick="lb(this)">
+      <img src="17.jpg" alt="Logo终稿">
+      <div class="overlay"><div class="tags"><span class="tag">Logo</span><span class="tag">品牌</span></div><div class="c-title">多品牌 Logo 设计 · 终稿</div><div class="c-desc">topcalcs · KACHA · kosi · BJCrafts</div></div>
+    </div>
+    <div class="card" data-cat="logo" onclick="lb(this)">
+      <img src="18.jpg" alt="Logo方案">
+      <div class="overlay"><div class="tags"><span class="tag">Logo</span><span class="tag">品牌</span></div><div class="c-title">多品牌 Logo 设计 · 方案</div><div class="c-desc">TopCats · Buildher · JRACRAFT · CXG</div></div>
     </div>
 
-    <div class="work-card">
-      <div class="work-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        独立站 KV
-      </div>
-      <div class="work-overlay">
-        <div class="work-tags"><span class="work-tag">独立站</span><span class="work-tag">KV</span></div>
-        <div class="work-title">独立站视觉设计</div>
-        <div class="work-desc">KV · 落地页 · 活动素材</div>
-      </div>
+    <!-- 3D -->
+    <div class="card" data-cat="3d" onclick="lb(this)">
+      <img src="19.jpg" alt="机械车建模">
+      <div class="overlay"><div class="tags"><span class="tag">3D</span><span class="tag">建模</span></div><div class="c-title">机械车 · 废土风建模</div><div class="c-desc">3ds Max 硬表面建模 · 多角度展示</div></div>
+    </div>
+    <div class="card" data-cat="3d" onclick="lb(this)">
+      <img src="20.jpg" alt="机械车渲染">
+      <div class="overlay"><div class="tags"><span class="tag">3D</span><span class="tag">渲染</span></div><div class="c-title">机械车 · KeyShot 渲染</div><div class="c-desc">材质贴图 · 灯光氛围 · 多视角渲染</div></div>
+    </div>
+    <div class="card" data-cat="3d" onclick="lb(this)">
+      <img src="21.jpg" alt="室内场景日光">
+      <div class="overlay"><div class="tags"><span class="tag">3D</span><span class="tag">场景</span></div><div class="c-title">室内场景 · 日光版</div><div class="c-desc">全场景道具建模 · 写实风格渲染</div></div>
+    </div>
+    <div class="card" data-cat="3d" onclick="lb(this)">
+      <img src="22.jpg" alt="室内场景夜光">
+      <div class="overlay"><div class="tags"><span class="tag">3D</span><span class="tag">场景</span></div><div class="c-title">室内场景 · 夜光版</div><div class="c-desc">灯光氛围营造 · 冷暖光对比渲染</div></div>
+    </div>
+    <div class="card" data-cat="3d" onclick="lb(this)">
+      <img src="23.jpg" alt="道具单体建模">
+      <div class="overlay"><div class="tags"><span class="tag">3D</span><span class="tag">道具</span></div><div class="c-title">室内道具 · 单体建模展示</div><div class="c-desc">家具/家电/生活用品全套道具建模</div></div>
     </div>
 
-    <div class="work-card">
-      <div class="work-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        速卖通
-      </div>
-      <div class="work-overlay">
-        <div class="work-tags"><span class="work-tag">速卖通</span><span class="work-tag">活动</span></div>
-        <div class="work-title">速卖通活动页设计</div>
-        <div class="work-desc">大促素材 · 详情页 · 广告 Banner</div>
-      </div>
+    <!-- 摄影 -->
+    <div class="card" data-cat="photo" onclick="lb(this)">
+      <img src="24.jpg" alt="摄影-美食">
+      <div class="overlay"><div class="tags"><span class="tag">摄影</span><span class="tag">美食</span></div><div class="c-title">美食摄影 · 光影氛围</div><div class="c-desc">食材质感 · 自然光构图</div></div>
     </div>
-
-    <div class="work-card">
-      <div class="work-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l5 3"/></svg>
-        更多作品
-      </div>
-      <div class="work-overlay">
-        <div class="work-tags"><span class="work-tag">更多</span></div>
-        <div class="work-title">更多项目</div>
-        <div class="work-desc">持续更新中</div>
-      </div>
+    <div class="card" data-cat="photo" onclick="lb(this)">
+      <img src="25.jpg" alt="摄影-街拍">
+      <div class="overlay"><div class="tags"><span class="tag">摄影</span><span class="tag">街拍</span></div><div class="c-title">街头摄影 · 夜景长曝</div><div class="c-desc">雨夜车流 · 天鹅湖光</div></div>
+    </div>
+    <div class="card" data-cat="photo" onclick="lb(this)">
+      <img src="26.jpg" alt="摄影-黑白">
+      <div class="overlay"><div class="tags"><span class="tag">摄影</span><span class="tag">黑白</span></div><div class="c-title">黑白纪实摄影</div><div class="c-desc">光影几何 · 街头人文 · 极简构图</div></div>
     </div>
 
   </div>
@@ -739,67 +295,40 @@
 <!-- SKILLS -->
 <section id="skills">
   <div class="reveal">
-    <p class="section-label">Skills</p>
-    <h2 class="section-title">专业<span>技能</span></h2>
+    <p class="s-label">Skills</p>
+    <h2 class="s-title">专业<span>技能</span></h2>
   </div>
-
-  <div class="skills-layout">
+  <div class="sk-layout">
     <div class="reveal">
-      <div class="skill-group">
-        <div class="skill-group-title">电商视觉设计</div>
-        <div class="skill-bar-item">
-          <div class="skill-bar-header"><span class="skill-bar-name">Amazon A+ / 详情页</span><span class="skill-bar-pct">95%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.95; animation-duration:1.2s;"></div></div>
-        </div>
-        <div class="skill-bar-item">
-          <div class="skill-bar-header"><span class="skill-bar-name">独立站 KV / 落地页</span><span class="skill-bar-pct">85%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.85; animation-duration:1.0s;"></div></div>
-        </div>
-        <div class="skill-bar-item">
-          <div class="skill-bar-header"><span class="skill-bar-name">速卖通活动素材</span><span class="skill-bar-pct">85%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.85; animation-duration:1.1s;"></div></div>
-        </div>
+      <div class="sk-group">
+        <div class="sk-head">电商视觉设计</div>
+        <div class="sk-item"><div class="sk-row"><span class="sk-name">Amazon A+ / 详情页</span><span class="sk-pct">95%</span></div><div class="sk-track"><div class="sk-fill" data-w="0.95"></div></div></div>
+        <div class="sk-item"><div class="sk-row"><span class="sk-name">独立站 KV / 落地页</span><span class="sk-pct">85%</span></div><div class="sk-track"><div class="sk-fill" data-w="0.85"></div></div></div>
+        <div class="sk-item"><div class="sk-row"><span class="sk-name">速卖通活动素材</span><span class="sk-pct">85%</span></div><div class="sk-track"><div class="sk-fill" data-w="0.85"></div></div></div>
+        <div class="sk-item"><div class="sk-row"><span class="sk-name">Banner / Logo 设计</span><span class="sk-pct">88%</span></div><div class="sk-track"><div class="sk-fill" data-w="0.88"></div></div></div>
       </div>
-      <div class="skill-group">
-        <div class="skill-group-title">3D 设计</div>
-        <div class="skill-bar-item">
-          <div class="skill-bar-header"><span class="skill-bar-name">3ds Max 建模</span><span class="skill-bar-pct">85%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.85; animation-duration:1.0s;"></div></div>
-        </div>
-        <div class="skill-bar-item">
-          <div class="skill-bar-header"><span class="skill-bar-name">KeyShot 渲染</span><span class="skill-bar-pct">88%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.88; animation-duration:1.1s;"></div></div>
-        </div>
-        <div class="skill-bar-item">
-          <div class="skill-bar-header"><span class="skill-bar-name">ZBrush 雕刻</span><span class="skill-bar-pct">75%</span></div>
-          <div class="skill-bar-track"><div class="skill-bar-fill" style="--w:0.75; animation-duration:0.9s;"></div></div>
-        </div>
+      <div class="sk-group">
+        <div class="sk-head">3D 设计</div>
+        <div class="sk-item"><div class="sk-row"><span class="sk-name">3ds Max 建模</span><span class="sk-pct">85%</span></div><div class="sk-track"><div class="sk-fill" data-w="0.85"></div></div></div>
+        <div class="sk-item"><div class="sk-row"><span class="sk-name">KeyShot 渲染</span><span class="sk-pct">88%</span></div><div class="sk-track"><div class="sk-fill" data-w="0.88"></div></div></div>
+        <div class="sk-item"><div class="sk-row"><span class="sk-name">ZBrush 雕刻</span><span class="sk-pct">75%</span></div><div class="sk-track"><div class="sk-fill" data-w="0.75"></div></div></div>
       </div>
     </div>
-
     <div class="reveal">
-      <div class="skill-group">
-        <div class="skill-group-title">设计工具</div>
-        <div class="skill-tags">
-          <span class="skill-tag">Photoshop</span>
-          <span class="skill-tag">Premiere</span>
-          <span class="skill-tag">After Effects</span>
-          <span class="skill-tag">3ds Max</span>
-          <span class="skill-tag">KeyShot</span>
-          <span class="skill-tag">ZBrush</span>
-          <span class="skill-tag">Gemini AI</span>
-          <span class="skill-tag">即梦 AI</span>
+      <div class="sk-group">
+        <div class="sk-head">设计工具</div>
+        <div class="sk-tags">
+          <span class="sk-tag">Photoshop</span><span class="sk-tag">Premiere</span><span class="sk-tag">After Effects</span>
+          <span class="sk-tag">3ds Max</span><span class="sk-tag">KeyShot</span><span class="sk-tag">ZBrush</span>
+          <span class="sk-tag">Gemini AI</span><span class="sk-tag">即梦 AI</span>
         </div>
       </div>
-      <div class="skill-group" style="margin-top:32px;">
-        <div class="skill-group-title">平台经验</div>
-        <div class="skill-tags">
-          <span class="skill-tag">Amazon Seller Central</span>
-          <span class="skill-tag">Amazon A+ / EBC</span>
-          <span class="skill-tag">独立站</span>
-          <span class="skill-tag">速卖通</span>
-          <span class="skill-tag">Prime Day 大促</span>
-          <span class="skill-tag">黑五素材</span>
+      <div class="sk-group" style="margin-top:26px;">
+        <div class="sk-head">平台经验</div>
+        <div class="sk-tags">
+          <span class="sk-tag">Amazon A+ / EBC</span><span class="sk-tag">Amazon Seller Central</span>
+          <span class="sk-tag">独立站</span><span class="sk-tag">速卖通</span>
+          <span class="sk-tag">Prime Day</span><span class="sk-tag">黑五大促</span>
         </div>
       </div>
     </div>
@@ -809,46 +338,24 @@
 <!-- ABOUT -->
 <section id="about">
   <div class="reveal">
-    <p class="section-label">About</p>
-    <h2 class="section-title">关于<span>我</span></h2>
+    <p class="s-label">About</p>
+    <h2 class="s-title">关于<span>我</span></h2>
   </div>
-
-  <div class="about-layout">
-    <div class="about-photo-wrap reveal">
-      <div class="about-photo-frame">
-        <!-- 替换：把下面这段替换为 <img src="你的照片.jpg" alt="吴兆宇"> -->
-        <div class="about-photo-placeholder">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" style="color:#E87722;opacity:0.4"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-          <span style="font-size:11px;letter-spacing:1px;color:var(--text-dim)">上传照片替换此处</span>
-        </div>
-      </div>
-      <div class="about-deco"></div>
-      <div class="about-deco2"></div>
+  <div class="ab-layout">
+    <div class="reveal">
+      <div class="ab-frame"><img src="1.jpg" alt="吴兆宇"></div>
     </div>
-
-    <div class="about-text reveal">
+    <div class="reveal">
       <h3>5年跨境电商视觉经验<br>专注转化率驱动的设计</h3>
       <div class="orange-line"></div>
-      <p>我是一名专注跨境电商视觉设计的设计师，拥有5年Amazon、独立站及速卖通的实战经验。我相信好的设计不仅要美观，更要能有效传递产品价值，提升页面转化。</p>
-      <p>擅长从运营视角提炼产品卖点，将信息结构化呈现，输出具有说服力的视觉内容。同时具备3D完整建模与渲染能力，可从产品造型阶段即介入视觉创作。</p>
-      <p>积极拥抱AI辅助设计工具，持续提升创作效率，适应跨境电商高节奏的交付需求。</p>
-      <div class="about-info-grid">
-        <div class="info-item">
-          <div class="info-label">所在城市</div>
-          <div class="info-value">广州</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">工作状态</div>
-          <div class="info-value">随时到岗</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">求职意向</div>
-          <div class="info-value">跨境电商视觉 / 3D设计</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">意向城市</div>
-          <div class="info-value">广州</div>
-        </div>
+      <p>我是一名专注跨境电商视觉设计的设计师，拥有5年 Amazon、独立站及速卖通实战经验。相信好的设计不仅要美观，更要能有效传递产品价值、提升页面转化。</p>
+      <p>擅长从运营视角提炼产品卖点，结构化呈现信息，输出具有说服力的视觉内容。具备 3D 完整建模与渲染能力，可从产品造型阶段介入视觉创作。</p>
+      <p>积极拥抱 AI 辅助设计工具，持续提升创作效率，适应跨境电商高节奏的交付需求。</p>
+      <div class="ab-grid">
+        <div><div class="i-label">所在城市</div><div class="i-val">广州</div></div>
+        <div><div class="i-label">工作状态</div><div class="i-val">随时到岗</div></div>
+        <div><div class="i-label">求职意向</div><div class="i-val">跨境电商视觉 / 3D</div></div>
+        <div><div class="i-label">意向城市</div><div class="i-val">广州</div></div>
       </div>
     </div>
   </div>
@@ -856,61 +363,83 @@
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="contact-inner reveal">
-    <p class="section-label" style="text-align:center">Contact</p>
-    <h2 class="section-title" style="text-align:center">开始<span>合作</span></h2>
-    <p>如果你正在寻找一位经验丰富的跨境电商视觉设计师，欢迎随时联系我，我可以提供完整作品集及更多案例展示。</p>
-    <div class="contact-links">
-      <a class="contact-chip" href="tel:13477701739">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 4.18 2 2 0 0 1 5.07 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L9.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+  <div class="ct-wrap reveal">
+    <p class="s-label" style="text-align:center">Contact</p>
+    <h2 class="s-title" style="text-align:center">开始<span>合作</span></h2>
+    <p>如果你正在寻找一位经验丰富的跨境电商视觉设计师，欢迎随时联系我，可提供完整作品集及更多案例展示。</p>
+    <div class="ct-links">
+      <a class="chip" href="tel:13477701739">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3.09 4.18 2 2 0 0 1 5.07 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L9.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         13477701739
       </a>
-      <a class="contact-chip" href="mailto:13477701739@163.com">
+      <a class="chip" href="mailto:13477701739@163.com">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         13477701739@163.com
       </a>
     </div>
-    <a href="#works" class="btn-primary">查看我的作品 →</a>
+    <a href="#works" class="btn-o">查看我的作品 →</a>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <p>© 2025 吴兆宇 · 跨境电商视觉设计师</p>
   <p>广州 · 随时到岗</p>
 </footer>
 
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="lbBg(event)">
+  <span class="lb-x" onclick="closeLb()">×</span>
+  <span class="lb-p" onclick="lbNav(-1)">‹</span>
+  <img id="lbImg" src="" alt="">
+  <span class="lb-n" onclick="lbNav(1)">›</span>
+  <div class="lb-cap" id="lbCap"></div>
+</div>
+
 <script>
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 80);
-        // Animate skill bars
-        entry.target.querySelectorAll('.skill-bar-fill').forEach(bar => {
-          bar.style.transform = `scaleX(${bar.style.getPropertyValue('--w') || 1})`;
-          bar.classList.add('animated');
-        });
-        observer.unobserve(entry.target);
+  // Reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e,i) => {
+      if(e.isIntersecting){
+        setTimeout(()=>e.target.classList.add('on'), i*80);
+        e.target.querySelectorAll('.sk-fill').forEach(b=>b.style.transform=`scaleX(${b.dataset.w})`);
+        obs.unobserve(e.target);
       }
     });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => observer.observe(el));
+  },{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-  // Skill bar animation via CSS custom property
-  document.querySelectorAll('.skill-bar-fill').forEach(bar => {
-    const w = getComputedStyle(bar).getPropertyValue('--w').trim() || '1';
-    bar.style.setProperty('--target', w);
+  // Filter
+  function filter(cat, btn){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+    btn.classList.add('on');
+    document.querySelectorAll('.card').forEach(c=>{
+      c.style.display = (cat==='all'||c.dataset.cat===cat)?'':'none';
+    });
+  }
+
+  // Lightbox
+  let cards=[], idx=0;
+  function lb(card){
+    cards=Array.from(document.querySelectorAll('.card:not([style*="display: none"])'));
+    idx=cards.indexOf(card);
+    show(idx);
+    document.getElementById('lb').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function show(i){
+    const c=cards[i];
+    document.getElementById('lbImg').src=c.querySelector('img').src;
+    document.getElementById('lbCap').textContent=c.querySelector('.c-title').textContent+' ('+(i+1)+'/'+cards.length+')';
+  }
+  function lbNav(d){idx=(idx+d+cards.length)%cards.length;show(idx);}
+  function closeLb(){document.getElementById('lb').classList.remove('open');document.body.style.overflow='';}
+  function lbBg(e){if(e.target===document.getElementById('lb'))closeLb();}
+  document.addEventListener('keydown',e=>{
+    if(!document.getElementById('lb').classList.contains('open'))return;
+    if(e.key==='Escape')closeLb();
+    if(e.key==='ArrowLeft')lbNav(-1);
+    if(e.key==='ArrowRight')lbNav(1);
   });
 </script>
-
-<style>
-  .skill-bar-fill.animated {
-    animation: none;
-    transition: transform 1s ease;
-  }
-</style>
-
 </body>
 </html>
