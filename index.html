@@ -122,29 +122,72 @@
   .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
   .reveal.on{opacity:1;transform:translateY(0);}
 
+  .nav-burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+  .nav-burger span{display:block;width:22px;height:2px;background:var(--text);transition:all .3s;}
+  .nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-burger.open span:nth-child(2){opacity:0;}
+  .nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .nav-drawer{display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:99;background:rgba(10,10,10,0.97);flex-direction:column;align-items:center;justify-content:center;gap:44px;}
+  .nav-drawer.open{display:flex;}
+  .nav-drawer a{color:var(--text);text-decoration:none;font-size:24px;font-weight:700;letter-spacing:2px;transition:color .2s;}
+  .nav-drawer a:active{color:var(--orange);}
+
   @media(max-width:768px){
     nav{padding:14px 20px;}
     .nav-links{display:none;}
-    .hero-content{padding:100px 20px 60px;}
-    section{padding:64px 20px;}
-    .stats{gap:20px;}
-    .sk-layout,.ab-layout{grid-template-columns:1fr;gap:36px;}
-    .grid{grid-template-columns:1fr;}
-    footer{padding:18px 20px;flex-direction:column;gap:6px;}
+    .nav-burger{display:flex;}
+    .hero-content{padding:90px 20px 50px;}
+    .hero-name{font-size:clamp(40px,12vw,64px);}
+    .hero-sub{font-size:13px;}
+    .stats{gap:16px;flex-wrap:wrap;}
+    .stat-n{font-size:26px;}
+    .stat-l{font-size:10px;}
+    .cta{flex-direction:column;gap:10px;}
+    .btn-o,.btn-g{text-align:center;padding:14px 24px;}
+    section{padding:56px 20px;}
+    .s-title{font-size:clamp(22px,6vw,32px);}
+    .tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+    .tabs::-webkit-scrollbar{display:none;}
+    .tab{white-space:nowrap;flex-shrink:0;}
+    .grid{grid-template-columns:1fr;gap:2px;}
+    .overlay{opacity:1;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 60%);}
+    .card img{filter:brightness(.8);}
+    .sk-layout{grid-template-columns:1fr;gap:32px;}
+    .ab-layout{grid-template-columns:1fr;gap:28px;}
+    .ab-text h3{font-size:18px;}
+    .ct-links{flex-direction:column;align-items:center;}
+    .chip{width:100%;max-width:300px;justify-content:center;}
+    .lb img{max-width:96vw;max-height:80vh;}
+    .lb-p{left:4px;font-size:22px;padding:10px;}
+    .lb-n{right:4px;font-size:22px;padding:10px;}
+    footer{padding:18px 20px;flex-direction:column;gap:6px;text-align:center;}
+  }
+  @media(max-width:400px){
+    .hero-name{font-size:38px;}
+    .stat-n{font-size:22px;}
   }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-logo">WZY</div>
+  <div class="nav-logo">Eddie</div>
   <ul class="nav-links">
     <li><a href="#works">作品</a></li>
     <li><a href="#skills">技能</a></li>
     <li><a href="#about">关于</a></li>
     <li><a href="#contact">联系</a></li>
   </ul>
+  <div class="nav-burger" id="burger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
 </nav>
+<div class="nav-drawer" id="drawer">
+  <a href="#works" onclick="closeMenu()">作品</a>
+  <a href="#skills" onclick="closeMenu()">技能</a>
+  <a href="#about" onclick="closeMenu()">关于</a>
+  <a href="#contact" onclick="closeMenu()">联系</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -162,6 +205,32 @@
     <div class="cta">
       <a href="#works" class="btn-o">查看作品</a>
       <a href="#contact" class="btn-g">联系我</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal">
+    <p class="s-label">About</p>
+    <h2 class="s-title">关于<span>我</span></h2>
+  </div>
+  <div class="ab-layout">
+    <div class="reveal">
+      <div class="ab-frame"><img src="1.jpg" alt="吴兆宇"></div>
+    </div>
+    <div class="reveal">
+      <h3>5年跨境电商视觉经验<br>专注转化率驱动的设计</h3>
+      <div class="orange-line"></div>
+      <p>我是一名专注跨境电商视觉设计的设计师，拥有5年 Amazon、独立站及速卖通实战经验。相信好的设计不仅要美观，更要能有效传递产品价值、提升页面转化。</p>
+      <p>擅长从运营视角提炼产品卖点，结构化呈现信息，输出具有说服力的视觉内容。具备 3D 完整建模与渲染能力，可从产品造型阶段介入视觉创作。</p>
+      <p>积极拥抱 AI 辅助设计工具，持续提升创作效率，适应跨境电商高节奏的交付需求。</p>
+      <div class="ab-grid">
+        <div><div class="i-label">所在城市</div><div class="i-val">广州</div></div>
+        <div><div class="i-label">工作状态</div><div class="i-val">随时到岗</div></div>
+        <div><div class="i-label">求职意向</div><div class="i-val">跨境电商视觉 / 3D</div></div>
+        <div><div class="i-label">意向城市</div><div class="i-val">广州</div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -335,32 +404,6 @@
   </div>
 </section>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="reveal">
-    <p class="s-label">About</p>
-    <h2 class="s-title">关于<span>我</span></h2>
-  </div>
-  <div class="ab-layout">
-    <div class="reveal">
-      <div class="ab-frame"><img src="1.jpg" alt="吴兆宇"></div>
-    </div>
-    <div class="reveal">
-      <h3>5年跨境电商视觉经验<br>专注转化率驱动的设计</h3>
-      <div class="orange-line"></div>
-      <p>我是一名专注跨境电商视觉设计的设计师，拥有5年 Amazon、独立站及速卖通实战经验。相信好的设计不仅要美观，更要能有效传递产品价值、提升页面转化。</p>
-      <p>擅长从运营视角提炼产品卖点，结构化呈现信息，输出具有说服力的视觉内容。具备 3D 完整建模与渲染能力，可从产品造型阶段介入视觉创作。</p>
-      <p>积极拥抱 AI 辅助设计工具，持续提升创作效率，适应跨境电商高节奏的交付需求。</p>
-      <div class="ab-grid">
-        <div><div class="i-label">所在城市</div><div class="i-val">广州</div></div>
-        <div><div class="i-label">工作状态</div><div class="i-val">随时到岗</div></div>
-        <div><div class="i-label">求职意向</div><div class="i-val">跨境电商视觉 / 3D</div></div>
-        <div><div class="i-label">意向城市</div><div class="i-val">广州</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- CONTACT -->
 <section id="contact">
   <div class="ct-wrap reveal">
@@ -440,6 +483,17 @@
     if(e.key==='ArrowLeft')lbNav(-1);
     if(e.key==='ArrowRight')lbNav(1);
   });
+
+  function toggleMenu(){
+    document.getElementById('burger').classList.toggle('open');
+    document.getElementById('drawer').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('drawer').classList.contains('open') ? 'hidden' : '';
+  }
+  function closeMenu(){
+    document.getElementById('burger').classList.remove('open');
+    document.getElementById('drawer').classList.remove('open');
+    document.body.style.overflow = '';
+  }
 </script>
 </body>
 </html>
